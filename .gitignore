@@ -5,7 +5,9 @@
 [Bb]uilds/
 Assets/AssetStoreTools*
 
-
+# Free Store Assets
+Assets/FreeStoreAssets/*
+!Assets/FreeStoreAssets/assetsUsed.txt
 
 # Visual Studio cache directory
 .vs/
