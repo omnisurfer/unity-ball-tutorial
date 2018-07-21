@@ -7,7 +7,7 @@ Assets/AssetStoreTools*
 
 # Free Store Assets
 Assets/FreeStoreAssets/*
-!Assets/FreeStoreAssets/NaturalTilingTextures/gitkeep.txt
+!Assets/FreeStoreAssets/assetsUsed.txt
 
 # Visual Studio cache directory
 .vs/
