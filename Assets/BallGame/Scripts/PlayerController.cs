@@ -88,13 +88,13 @@ public class PlayerController : MonoBehaviour {
 		if (other.gameObject.CompareTag ("Pick Up"))
 		{
 			// Make the other game object (the pick up) inactive, to make it disappear
-			other.gameObject.SetActive (false);
+			//other.gameObject.SetActive (false);
 
 			// Add one to the score variable 'count'
-			count = count + 1;
+			//count = count + 1;
 
 			// Run the 'SetCountText()' function (see below)
-			SetCountText ();
+			//SetCountText ();
 		}
 	}
 
