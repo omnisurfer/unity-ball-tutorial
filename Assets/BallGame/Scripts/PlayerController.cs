@@ -11,17 +11,18 @@ public class PlayerController : MonoBehaviour {
 	public float xySpeed;
     public float zSpeed;
     public float jumpAcceleration;
-    public float jumpImpulseTime_s;
+    public float jumpImpulseTime_s;    
 
 	public Text countText;
-	public Text winText;    
-    
-	// Create private references to the rigidbody component on the player, and the count of pick up objects picked up so far
-	private Rigidbody rb;
+	public Text winText;
+
+    private GameObject[] pickUps;
+
+    // Create private references to the rigidbody component on the player, and the count of pick up objects picked up so far
+    private Rigidbody rb;
 	private int count;
 
     private bool jump = false;
-    private float gravityms = 9.8f;
     private float moveZ = 0.0f;
 
 	// At the start of the game..
@@ -30,14 +31,17 @@ public class PlayerController : MonoBehaviour {
 		// Assign the Rigidbody component to our private rb variable
 		rb = GetComponent<Rigidbody>();
 
-		// Set the count to zero 
-		count = 0;
+        // get a reference to the pickUps
+        pickUps = GameObject.FindGameObjectsWithTag("Pick Up");
+
+        // Set the count to zero 
+        count = 0;
 
 		// Run the SetCountText function to update the UI (see below)
 		SetCountText ();
 
 		// Set the text property of our Win Text UI to an empty string, making the 'You Win' (game over message) blank
-		winText.text = "";
+		winText.text = "";                        
 	}
 
 	// Each physics step..
@@ -47,7 +51,6 @@ public class PlayerController : MonoBehaviour {
 		float moveHorizontal = Input.GetAxis ("Horizontal");
 		float moveVertical = Input.GetAxis ("Vertical");
         
-
         float distanceToGround = GetComponent<Collider>().bounds.extents.y;
 
         bool playerIsGrounded = Physics.Raycast(transform.position, Vector3.down, distanceToGround + 0.1f);
@@ -78,6 +81,18 @@ public class PlayerController : MonoBehaviour {
         // Add a physical force to our Player rigidbody using our 'movement' Vector3 above, 
         // multiplying it by 'speed' - our public player speed that appears in the inspector
         rb.AddForce(movement.x * xySpeed, moveZ * zSpeed, movement.z * xySpeed);
+
+        // check if player has fallen off into the void
+        if(rb.position.y < -10.0f)
+        {
+            // reset position
+            rb.position = new Vector3(0.0f, 1.0f, 0.0f);
+
+            // negate forces
+            rb.velocity = Vector3.zero;
+            // rb.angularVelocity = Vector3.zero;
+        }
+
 	}
 
 	// When this game object intersects a collider with 'is trigger' checked, 
@@ -88,13 +103,13 @@ public class PlayerController : MonoBehaviour {
 		if (other.gameObject.CompareTag ("Pick Up"))
 		{
 			// Make the other game object (the pick up) inactive, to make it disappear
-			//other.gameObject.SetActive (false);
+			other.gameObject.SetActive (false);
 
 			// Add one to the score variable 'count'
-			//count = count + 1;
+			count = count + 1;
 
 			// Run the 'SetCountText()' function (see below)
-			//SetCountText ();
+			SetCountText ();
 		}
 	}
 
@@ -104,11 +119,31 @@ public class PlayerController : MonoBehaviour {
 		// Update the text field of our 'countText' variable
 		countText.text = "Count: " + count.ToString ();
 
-		// Check if our 'count' is equal to or exceeded 12
-		if (count >= 12) 
+        // Check if our 'count' is equal to or exceeded 12
+        //int quantity = pickUps.Length;
+        
+        if (count == pickUps.Length) 
 		{
 			// Set the text value of our 'winText'
 			winText.text = "You Win!";
-		}
+
+            ResetPickUps();
+        }
+        else if(count > pickUps.Length)
+        {
+            winText.text = "";
+            count = 1;
+        }
 	}
+
+    void ResetPickUps()
+    {
+        foreach (var pickUp in pickUps)
+        {
+            Debug.Log("pickUps name: " + pickUp.name);
+            pickUp.SetActive(true);
+
+            rb.position = new Vector3(0.0f, 0.5f, 0.0f);
+        }        
+    }
 }
