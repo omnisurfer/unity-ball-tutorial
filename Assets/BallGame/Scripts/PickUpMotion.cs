@@ -5,8 +5,8 @@ public class PickUpMotion : MonoBehaviour {
 
     public GameObject ground;
     
-    private Vector3 initPosition = new Vector3(0.0f, 0.0f, 0.0f);
-    private Vector3 movementAmplitude = new Vector3(6.0f, 0.0f, 6.0f);
+    private Vector3 initPosition = new Vector3(0.0f, -0.5f, 0.0f);
+    private Vector3 movementAmplitude = new Vector3(6.0f, 1.0f, 6.0f);
     private Vector3 rotationCenter = new Vector3(0.0f, 0.0f, 0.0f);
 
     private float xFrequency = 0.05f;
@@ -14,8 +14,9 @@ public class PickUpMotion : MonoBehaviour {
     private float startAngle = 0.0f;
     
     private void Start()
-    {                      
-        initPosition = transform.position;
+    {
+        Debug.Log("PickUpMotion Start()");
+        initPosition = initPosition + transform.position;
 
         startAngle = Mathf.Atan2(initPosition.x, initPosition.z);
     }
@@ -32,9 +33,9 @@ public class PickUpMotion : MonoBehaviour {
         float time = Time.time;
 
         Vector3 newPosition = new Vector3 (
-            Mathf.Sin((2.0f * Mathf.PI * xFrequency * time) + startAngle) * movementAmplitude.x + rotationCenter.x,            
-            Mathf.Cos((2.0f * Mathf.PI * xFrequency * 3.0f * time) + initPosition.y) * movementAmplitude.y + 0.5f + rotationCenter.y,
-            Mathf.Cos((2.0f * Mathf.PI * xFrequency * time) + startAngle) * movementAmplitude.z + rotationCenter.z
+            (Mathf.Sin((2.0f * Mathf.PI * xFrequency * time) + startAngle) * movementAmplitude.x) + rotationCenter.x,            
+            (Mathf.Cos((2.0f * Mathf.PI * xFrequency * 3.0f * time)) * movementAmplitude.y) + rotationCenter.y + initPosition.y,
+            (Mathf.Cos((2.0f * Mathf.PI * xFrequency * time) + startAngle) * movementAmplitude.z) + rotationCenter.z
             );
 
         transform.position = newPosition;

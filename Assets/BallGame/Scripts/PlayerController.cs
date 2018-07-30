@@ -121,20 +121,20 @@ public class PlayerController : MonoBehaviour {
 
         // Check if our 'count' is equal to or exceeded 12
         //int quantity = pickUps.Length;
-        
-        if (count == pickUps.Length) 
-		{
-			// Set the text value of our 'winText'
-			winText.text = "You Win!";
 
+        if (count == pickUps.Length)
+        {
+            // Set the text value of our 'winText'
+            winText.text = "You Win!";
+            count = 0;
+            countText.text = "Count: " + count.ToString();
             ResetPickUps();
         }
-        else if(count > pickUps.Length)
+        else
         {
             winText.text = "";
-            count = 1;
         }
-	}
+    }
 
     void ResetPickUps()
     {
